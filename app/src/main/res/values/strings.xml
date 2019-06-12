@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Show My IP</string>
+    <string name="show_ip_address">Show IP Address</string>
+</resources>
