@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.show_ip_button){
+            showIPButton.setEnabled(false);
             searchProgressBar.setVisibility(View.VISIBLE);
             makeIPRequest();
         }
