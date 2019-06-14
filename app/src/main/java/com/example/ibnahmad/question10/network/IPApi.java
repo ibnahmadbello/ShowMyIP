@@ -27,7 +27,7 @@ public class IPApi {
 
     }
 
-    public static Retrofit getRetrofit(Context context) {
+    public static Retrofit getRetrofit() {
         if (retrofit == null)
             retrofit = new Retrofit
                     .Builder()

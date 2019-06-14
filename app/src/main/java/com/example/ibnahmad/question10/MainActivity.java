@@ -22,10 +22,10 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private IPService ipService;
     private TextView resultTextView;
     private Button showIPButton;
     private ProgressBar searchProgressBar;
+    Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,36 +39,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         resultTextView = findViewById(R.id.ip_result);
 
-        ipService = IPApi.getRetrofit(this).create(IPService.class);
+        presenter = new Presenter(this);
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.show_ip_button){
-            showIPButton.setEnabled(false);
-            searchProgressBar.setVisibility(View.VISIBLE);
-            makeIPRequest();
+            disableButton();
+            showProgressBar();
+            presenter.createInstance();
         }
     }
 
-    private void makeIPRequest() {
-        ipService.getIPDetail().enqueue(new Callback<IPClass>() {
-            @Override
-            public void onResponse(Call<IPClass> call, Response<IPClass> response) {
-                searchProgressBar.setVisibility(View.GONE);
-                displayResult(response);
-//                Toast.makeText(MainActivity.this, response.body().getCountry(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<IPClass> call, Throwable t) {
-                t.printStackTrace();
-                Log.d(TAG, "Error loading response");
-            }
-        });
+    public void showProgressBar(){
+        searchProgressBar.setVisibility(View.VISIBLE);
     }
 
-    private void displayResult(Response<IPClass> response) {
+    public void hideProgressBar(){
+        searchProgressBar.setVisibility(View.GONE);
+    }
+
+    public void disableButton(){
+        showIPButton.setEnabled(false);
+    }
+
+    public void enableButton(){
+        showIPButton.setEnabled(true);
+    }
+
+    public void displayResult(Response<IPClass> response) {
         IPClass ipClassResponse = response.body();
         resultTextView.setText(String.format("%s\tfrom\t%s", ipClassResponse.getQuery(), ipClassResponse.getCountry()));
     }
